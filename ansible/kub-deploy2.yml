@@ -1,0 +1,33 @@
+- name: master node initializating
+  hosts: kub_master
+  gather_facts: false
+  become: true
+  become_user: "root"
+  become_method: "sudo"
+
+
+  tasks:
+
+    - name: init master node
+      shell:
+        cmd: "kubeadm init --control-plane-endpoint=192.168.10.21 > /home/ubuntu/master.txt"
+
+
+
+    - name: create cluster config dir
+      file:
+        path: "/home/ubuntu/.kube"
+        state: directory
+        owner: ubuntu
+        group: ubuntu
+        mode: "u=rwx,g=rx,o="
+        recurse: true
+
+    - name: copy kube config
+      copy:
+        src: "/etc/kubernetes/admin.conf"
+        dest: "/home/ubuntu/.kube/config"
+        owner: ubuntu
+        group: ubuntu
+        mode: "u=rw,g=rw,o="
+        remote_src: true

@@ -1,0 +1,21 @@
+- name: install ... to master
+  hosts: kub_master
+  gather_facts: false
+  become: true
+  become_user: "root"
+  become_method: "sudo"
+
+
+  tasks:
+
+    - name: get kompose
+      shell:
+        cmd: "curl -L https://github.com/kubernetes/kompose/releases/download/v1.28.0/kompose-linux-amd64 -o kompose"
+        chdir: "/usr/local/bin"
+
+    - name: make kompose executable
+      file:
+        path: /usr/local/bin/kompose
+        owner: root
+        group: root
+        mode: 'u=rwx,g=rwx,o=rx'

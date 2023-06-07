@@ -1,0 +1,25 @@
+- name: install helm
+  hosts: kub_master
+  gather_facts: false
+  become: true
+  become_user: "root"
+  become_method: "sudo"
+  tasks:
+
+    - name: get installation script
+      shell:
+        cmd: "curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3"
+        chdir: "/home/ubuntu"
+
+    - name: make script executable
+      file:
+        path: "/home/ubuntu/get_helm.sh"
+        mode: 'u=rwx,g=rw,o=r'
+
+    - name: execute helm installation file
+      shell:
+        cmd: "./get_helm.sh"
+        chdir: "/home/ubuntu"
+
+
+

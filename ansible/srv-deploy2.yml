@@ -1,0 +1,25 @@
+- name: isntall Gitlab runner
+  hosts: srv
+  gather_facts: false
+  become: true
+  become_user: "root"
+  become_method: "sudo"
+
+
+  tasks:
+
+    - name: install gitlab repositories
+      shell:
+        cmd: 'curl -L "https://packages.gitlab.com/install/repositories/runner/gitlab-runner/script.deb.sh" | bash'
+
+    - name: installing gitlab runner
+      package:
+        name: "gitlab-runner"
+        state: present
+        update_cache: true
+
+    - name: add gitlab-runner user to  docker gr
+      user:
+        name: gitlab-runner
+        groups: docker
+        append: yes
